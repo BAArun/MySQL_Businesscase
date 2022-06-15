@@ -3,11 +3,14 @@ select * from data_mart.weekly_sales;
 describe data_mart.weekly_sales;
 select count(*) from data_mart.weekly_sales;
 create table date_format as
+#Convert the week_date to a DATE format
 select STR_TO_DATE(week_date, '%d/%m/%Y') as dd , region, platform , segment , customer_type, transactions,sales from data_mart.weekly_sales;
 select * from date_format;
-drop table date_format;
-select * from date_format;
-drop table clean_weekly_sales;
+#Add a week_number as the second column for each week_date value, for example any value from the 1st of January to 7th of January will be 1, 8th to 14th will be 2 etc
+->Add a month_number with the calendar month for each week_date value as the 3rd column
+->Add a calendar_year column as the 4th column containing either 2018, 2019 or 2020 values
+->Add a new column called age_band after the original segment column using the following mapping on the number inside the segment value - 1 Young Adults
+2 Middle Aged , 3 or 4 Retirees
 create table clean_weekly_sales as SELECT dd,
 FLOOR((DAYOFMONTH(dd))/7) +1 as week_number,
 month(dd) as month_number , YEAR(dd) as calendar_year, region, platform , segment ,
